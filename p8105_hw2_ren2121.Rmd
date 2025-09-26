@@ -19,10 +19,14 @@ Importing and cleaning the pols-month dataset:
 pols_month_df =
   read_csv("538_data/pols-month.csv", na = c("NA", ".", "")) |> 
   separate(mon, into = c("year", "month", "day")) |> 
-  mutate(month = month.name[as.integer(month)]) |> 
-  mutate(president = case_when(
-    prez_dem == 1 ~ "dem",
-    prez_dem == 0 ~ "gop")) |> 
+   mutate(
+    year = as.integer(year),
+    month = as.integer(month),                 
+    month = month.name[month],                  
+    month = factor(month, levels = month.name),
+    president = case_when(
+      prez_dem == 1 ~ "dem",
+      prez_dem == 0 ~ "gop")) |> 
   select(-prez_dem, -prez_gop, -day)
 
 ```
@@ -30,6 +34,7 @@ pols_month_df =
 Importing and cleaning the snp dataset:
 
 ```{r}
+
 snp_df =
   read_csv("538_data/snp.csv", na = c("NA", ".", "")) |> 
   separate(date, into = c("month", "day", "year")) |> 
@@ -38,15 +43,16 @@ snp_df =
     month = as.integer(month),
     year = if_else(year >= 50, 1900 + year, 2000 + year),
     month = month.name[month],
-    month = factor(month, levels = month.name)
-  ) |> 
+    month = factor(month, levels = month.name)) |> 
   relocate(year, month) |> 
   arrange(year, month)
+
 ```
 
 Importing and cleaning the unemployment dataset:
 
 ```{r}
+
 unemployment_df =
   read_csv("538_data/unemployment.csv", na = c("NA", ".", "")) |> 
   pivot_longer(
@@ -54,11 +60,20 @@ unemployment_df =
     names_to = "month",
     values_to = "unemployment") |> 
   mutate(
-    month = month.name[match(month, month.abb)]) |> 
-  rename(year = Year) |> 
+    year = as.integer(Year),                     
+    month = month.name[match(month, month.abb)],
+    month = factor(month, levels = month.name)) |>  
+  select(-Year) |> 
+  relocate(year)
 
 ```
 
+Joining the datasets:
+
+```{r}
+snp_pols_df = 
+  full_join(snp_df, pols_month_df, by = c("year", "month"))
+```
 
 
 

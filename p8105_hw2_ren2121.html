@@ -373,10 +373,14 @@ display: none;
 <pre class="r"><code>pols_month_df =
   read_csv(&quot;538_data/pols-month.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
   separate(mon, into = c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;)) |&gt; 
-  mutate(month = month.name[as.integer(month)]) |&gt; 
-  mutate(president = case_when(
-    prez_dem == 1 ~ &quot;dem&quot;,
-    prez_dem == 0 ~ &quot;gop&quot;)) |&gt; 
+   mutate(
+    year = as.integer(year),
+    month = as.integer(month),                 
+    month = month.name[month],                  
+    month = factor(month, levels = month.name),
+    president = case_when(
+      prez_dem == 1 ~ &quot;dem&quot;,
+      prez_dem == 0 ~ &quot;gop&quot;)) |&gt; 
   select(-prez_dem, -prez_gop, -day)</code></pre>
 <pre><code>## Rows: 822 Columns: 9
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -394,9 +398,10 @@ display: none;
     year = as.integer(year),
     month = as.integer(month),
     year = if_else(year &gt;= 50, 1900 + year, 2000 + year),
-    month = month.name[month]
-  ) |&gt; 
-  relocate(year, month)</code></pre>
+    month = month.name[month],
+    month = factor(month, levels = month.name)) |&gt; 
+  relocate(year, month) |&gt; 
+  arrange(year, month)</code></pre>
 <pre><code>## Rows: 787 Columns: 2
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -413,8 +418,11 @@ display: none;
     names_to = &quot;month&quot;,
     values_to = &quot;unemployment&quot;) |&gt; 
   mutate(
-    month = month.name[match(month, month.abb)]) |&gt; 
-  rename(year = Year)</code></pre>
+    year = as.integer(Year),                     
+    month = month.name[match(month, month.abb)],
+    month = factor(month, levels = month.name)) |&gt;  
+  select(-Year) |&gt; 
+  relocate(year)</code></pre>
 <pre><code>## Rows: 68 Columns: 13
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -422,6 +430,9 @@ display: none;
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Joining the datasets:</p>
+<pre class="r"><code>snp_pols_df = 
+  full_join(snp_df, pols_month_df, by = c(&quot;year&quot;, &quot;month&quot;))</code></pre>
 </div>
 
 
