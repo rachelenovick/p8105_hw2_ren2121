@@ -73,9 +73,21 @@ Joining the datasets:
 ```{r}
 snp_pols_df = 
   full_join(snp_df, pols_month_df, by = c("year", "month"))
+
+full_df = 
+  full_join(snp_pols_df, unemployment_df, by = c("year", "month")) |> 
+  arrange(year, month)
 ```
 
+**Description of the datasets**
 
+The pols-month dataset has 822 observations and 9 variables (after cleaning), and provides information on the number of national politicians who are democratic or republican at any given time. It contains variables including: year, month, whether the president was republican or democrat, and the number of democratic and republic senators, governors, and representatives on those associated date.
+
+The snp dataset has 787 observations and 4 variables (after cleaning), and provides information on the S&P. The variables included are: year, month, day, and close (the closing values of the S&P stock index on the associated date).
+
+The unemployment dataset contains 68 observations and 3 variables (after cleaning), and provides information on the percentage of unemployment by date. The variables it includes are: year, month, and % unemployment associated with the month/year.
+
+The resulting fully joined dataset has 828 observations and 12 variables: year, month, day, unemployment, president party, close, and the number of democratic and republican senators, governors, and representatives on the associated dates.
 
 
 
