@@ -386,17 +386,12 @@ display: none;
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>unemployment_df =
-  read_csv(&quot;538_data/unemployment.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) </code></pre>
-<pre><code>## Rows: 68 Columns: 13
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## dbl (13): Year, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Importing and cleaning the snp dataset:</p>
 <pre class="r"><code>snp_df =
-  read_csv(&quot;538_data/snp.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) </code></pre>
+  read_csv(&quot;538_data/snp.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
+  separate(date, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;)) |&gt; 
+  mutate(month = month.name[as.integer(month)]) |&gt; 
+  relocate(year, month)</code></pre>
 <pre><code>## Rows: 787 Columns: 2
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;

@@ -27,11 +27,13 @@ pols_month_df =
 
 ```
 
+Importing and cleaning the snp dataset:
+
 ```{r}
-unemployment_df =
-  read_csv("538_data/unemployment.csv", na = c("NA", ".", "")) 
-  
 snp_df =
-  read_csv("538_data/snp.csv", na = c("NA", ".", "")) 
+  read_csv("538_data/snp.csv", na = c("NA", ".", "")) |> 
+  separate(date, into = c("month", "day", "year")) |> 
+  mutate(month = month.name[as.integer(month)]) |> 
+  relocate(year, month)
 ```
 
