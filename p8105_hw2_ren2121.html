@@ -390,7 +390,12 @@ display: none;
 <pre class="r"><code>snp_df =
   read_csv(&quot;538_data/snp.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
   separate(date, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;)) |&gt; 
-  mutate(month = month.name[as.integer(month)]) |&gt; 
+  mutate(
+    year = as.integer(year),
+    month = as.integer(month),
+    year = if_else(year &gt;= 50, 1900 + year, 2000 + year),
+    month = month.name[month]
+  ) |&gt; 
   relocate(year, month)</code></pre>
 <pre><code>## Rows: 787 Columns: 2
 ## ── Column specification ────────────────────────────────────────────────────────

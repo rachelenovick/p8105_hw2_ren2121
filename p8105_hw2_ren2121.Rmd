@@ -33,7 +33,12 @@ Importing and cleaning the snp dataset:
 snp_df =
   read_csv("538_data/snp.csv", na = c("NA", ".", "")) |> 
   separate(date, into = c("month", "day", "year")) |> 
-  mutate(month = month.name[as.integer(month)]) |> 
+  mutate(
+    year = as.integer(year),
+    month = as.integer(month),
+    year = if_else(year >= 50, 1900 + year, 2000 + year),
+    month = month.name[month]
+  ) |> 
   relocate(year, month)
 ```
 
