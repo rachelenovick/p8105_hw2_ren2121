@@ -1,0 +1,37 @@
+---
+title: "p8105_hw2_ren2121"
+output: html_document
+date: "2025-09-26"
+---
+
+Loading the tidyverse library.
+
+```{r}
+library(tidyverse)
+```
+
+# Problem 1
+
+Importing and cleaning the pols-month dataset:
+
+```{r}
+
+pols_month_df =
+  read_csv("538_data/pols-month.csv", na = c("NA", ".", "")) |> 
+  separate(mon, into = c("year", "month", "day")) |> 
+  mutate(month = month.name[as.integer(month)]) |> 
+  mutate(president = case_when(
+    prez_dem == 1 ~ "dem",
+    prez_dem == 0 ~ "gop")) |> 
+  select(-prez_dem, -prez_gop, -day)
+
+```
+
+```{r}
+unemployment_df =
+  read_csv("538_data/unemployment.csv", na = c("NA", ".", "")) 
+  
+snp_df =
+  read_csv("538_data/snp.csv", na = c("NA", ".", "")) 
+```
+
