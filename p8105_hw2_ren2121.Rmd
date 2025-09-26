@@ -42,3 +42,28 @@ snp_df =
   relocate(year, month)
 ```
 
+Importing and cleaning the unemployment dataset:
+
+```{r}
+unemployment_df =
+  read_csv("538_data/unemployment.csv", na = c("NA", ".", "")) |> 
+  pivot_longer(
+    cols = Jan:Dec,
+    names_to = "month",
+    values_to = "unemployment") |> 
+  mutate(
+    month = month.name[match(month, month.abb)]) |> 
+  rename(year = Year)
+```
+
+
+
+
+
+
+
+
+
+
+
+

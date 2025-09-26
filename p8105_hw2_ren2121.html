@@ -405,6 +405,23 @@ display: none;
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Importing and cleaning the unemployment dataset:</p>
+<pre class="r"><code>unemployment_df =
+  read_csv(&quot;538_data/unemployment.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
+  pivot_longer(
+    cols = Jan:Dec,
+    names_to = &quot;month&quot;,
+    values_to = &quot;unemployment&quot;) |&gt; 
+  mutate(
+    month = month.name[match(month, month.abb)]) |&gt; 
+  rename(year = Year)</code></pre>
+<pre><code>## Rows: 68 Columns: 13
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (13): Year, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 
 
