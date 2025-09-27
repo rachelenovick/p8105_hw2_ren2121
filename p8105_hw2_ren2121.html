@@ -465,44 +465,74 @@ representatives on the associated dates.</p>
   read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N653&quot;) |&gt; 
   janitor::clean_names() |&gt; 
   drop_na(dumpster) |&gt; 
-  mutate(sports_balls = as.integer(round(sports_balls)))|&gt; 
-  relocate(sports_balls, .after = last_col()) |&gt; 
-  mutate(year = as.integer(year)) |&gt; 
-  mutate(wheel = &quot;mr&quot;)</code></pre>
+  mutate(
+    sports_balls = as.integer(round(sports_balls)),
+    year = as.integer(year),
+    day = day(date),  
+    wheel = &quot;mr&quot;) |&gt; 
+  select(-date) |&gt;  
+  relocate(wheel, .after = dumpster) |&gt; 
+  relocate(year, month, day, .after = wheel) |&gt; 
+  relocate(sports_balls, .after = last_col())</code></pre>
 <p>Reading in and cleaning the Professor Trash Wheel dataset:</p>
 <pre class="r"><code>prof_trash = 
   read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M120&quot;) |&gt; 
   janitor::clean_names()|&gt; 
-  mutate(wheel = &quot;prof&quot;)</code></pre>
+   mutate(
+    day = day(date),
+    wheel = &quot;prof&quot;) |&gt; 
+  select(-date) |&gt; 
+  relocate(wheel, .after = dumpster) |&gt; 
+  relocate(year, month, day, .after = wheel)</code></pre>
 <p>Reading in and cleaning the Gwynnda dataset:</p>
 <pre class="r"><code>gwynnda_trash = 
   read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Gwynnda Trash Wheel&quot;, range = &quot;A2:L265&quot;) |&gt; 
   janitor::clean_names() |&gt; 
-  mutate(wheel = &quot;gwynnda&quot;)</code></pre>
+  mutate(
+    day = day(date),
+    wheel = &quot;gwynnda&quot;) |&gt; 
+  select(-date) |&gt; 
+  relocate(wheel, .after = dumpster) |&gt; 
+  relocate(year, month, day, .after = wheel)</code></pre>
 <p>Joining the datasets:</p>
 <pre class="r"><code>full_trash = 
   full_join(mr_trash, prof_trash, by = NULL) |&gt; 
   full_join(gwynnda_trash, by = NULL)</code></pre>
-<pre><code>## Joining with `by = join_by(dumpster, month, year, date, weight_tons,
+<pre><code>## Joining with `by = join_by(dumpster, wheel, year, month, day, weight_tons,
 ## volume_cubic_yards, plastic_bottles, polystyrene, cigarette_butts,
-## glass_bottles, plastic_bags, wrappers, homes_powered, wheel)`
-## Joining with `by = join_by(dumpster, month, year, date, weight_tons,
+## glass_bottles, plastic_bags, wrappers, homes_powered)`
+## Joining with `by = join_by(dumpster, wheel, year, month, day, weight_tons,
 ## volume_cubic_yards, plastic_bottles, polystyrene, cigarette_butts,
-## plastic_bags, wrappers, homes_powered, wheel)`</code></pre>
+## plastic_bags, wrappers, homes_powered)`</code></pre>
 <p><strong>Description of the datasets</strong></p>
 <p>The Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel
 all provide data on the amount, type, and date of collection of trash by
 each respective trash wheel as well as the number of homes they powered
-by running. They all contain the following variables: dumpster, month,
-year, date, weight_tons, volume_cubic_yards, plastic_bottles,
+by running. They all contain the following variables: dumpster, wheel,
+year, month, day, weight_tons, volume_cubic_yards, plastic_bottles,
 polystyrene, cigarette_butts, glass_bottles, plastic_bags, wrappers,
-homes_powered, wheel. Mr. Trash Wheel also contains a variable for the
-number of sports balls collected. In the final joined dataset, there are
-1032 total observations.</p>
+homes_powered. Mr. Trash Wheel also contains a variable for the number
+of sports balls collected. In the final joined dataset, there are 1032
+total observations.</p>
 <p>For available data, the total weight of trash collected by Professor
 Trash Wheel was 3135.47 tons.</p>
 <p>In June 2022, Gwynnda Trash Wheel collected 5.222^{4} cigarette
 butts.</p>
+</div>
+<div id="problem-3" class="section level1">
+<h1>Problem 3</h1>
+<p>Importing and cleaning the zipcodes dataset:</p>
+<pre class="r"><code>zipcodes_df = 
+  read_csv(&quot;zillow_data/Zip_Codes.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
+  janitor::clean_names()</code></pre>
+<pre><code>## Rows: 322 Columns: 7
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): County, County Code, File Date, Neighborhood
+## dbl (3): State FIPS, County FIPS, ZipCode
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 
 

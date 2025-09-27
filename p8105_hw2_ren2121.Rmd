@@ -100,10 +100,15 @@ mr_trash =
   read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N653") |> 
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
-  mutate(sports_balls = as.integer(round(sports_balls)))|> 
-  relocate(sports_balls, .after = last_col()) |> 
-  mutate(year = as.integer(year)) |> 
-  mutate(wheel = "mr")
+  mutate(
+    sports_balls = as.integer(round(sports_balls)),
+    year = as.integer(year),
+    day = day(date),  
+    wheel = "mr") |> 
+  select(-date) |>  
+  relocate(wheel, .after = dumpster) |> 
+  relocate(year, month, day, .after = wheel) |> 
+  relocate(sports_balls, .after = last_col())
 
 ```
 
@@ -114,7 +119,12 @@ Reading in and cleaning the Professor Trash Wheel dataset:
 prof_trash = 
   read_excel("trash_data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M120") |> 
   janitor::clean_names()|> 
-  mutate(wheel = "prof")
+   mutate(
+    day = day(date),
+    wheel = "prof") |> 
+  select(-date) |> 
+  relocate(wheel, .after = dumpster) |> 
+  relocate(year, month, day, .after = wheel)
 
 ```
 
@@ -125,7 +135,12 @@ Reading in and cleaning the Gwynnda dataset:
 gwynnda_trash = 
   read_excel("trash_data.xlsx", sheet = "Gwynnda Trash Wheel", range = "A2:L265") |> 
   janitor::clean_names() |> 
-  mutate(wheel = "gwynnda")
+  mutate(
+    day = day(date),
+    wheel = "gwynnda") |> 
+  select(-date) |> 
+  relocate(wheel, .after = dumpster) |> 
+  relocate(year, month, day, .after = wheel)
 
 ```
 
@@ -146,6 +161,19 @@ The Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel all provide 
 For available data, the total weight of trash collected by Professor Trash Wheel was `r sum(full_trash[["weight_tons"]], na.rm = TRUE)` tons.
 
 In June 2022, Gwynnda Trash Wheel collected `r sum(full_trash[["cigarette_butts"]][full_trash[["month"]] == "June" & full_trash[["year"]] == 2022], na.rm = TRUE)` cigarette butts.
+
+# Problem 3
+
+Importing and cleaning the zipcodes dataset:
+
+```{r}
+
+zipcodes_df = 
+  read_csv("zillow_data/Zip_Codes.csv", na = c("NA", ".", "")) |> 
+  janitor::clean_names()
+
+```
+
 
 
 
