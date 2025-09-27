@@ -104,6 +104,15 @@ mr_trash =
 
 ```
 
+Reading in and cleaning the Professor Trash Wheel dataset:
+
+```{r}
+
+prof_trash = 
+  read_excel("trash_data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M120") |> 
+  janitor::clean_names()
+
+```
 
 
 

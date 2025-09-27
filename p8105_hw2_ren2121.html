@@ -466,6 +466,10 @@ representatives on the associated dates.</p>
   janitor::clean_names() |&gt; 
   drop_na(dumpster) |&gt; 
   mutate(sports_balls = as.integer(round(sports_balls)))</code></pre>
+<p>Reading in and cleaning the Professor Trash Wheel dataset:</p>
+<pre class="r"><code>prof_trash = 
+  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M120&quot;) |&gt; 
+  janitor::clean_names()</code></pre>
 </div>
 
 
