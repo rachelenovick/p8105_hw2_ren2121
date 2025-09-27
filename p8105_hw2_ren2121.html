@@ -367,6 +367,7 @@ display: none;
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(readxl)</code></pre>
 <div id="problem-1" class="section level1">
 <h1>Problem 1</h1>
 <p>Importing and cleaning the pols-month dataset:</p>
@@ -456,6 +457,15 @@ unemployment associated with the month/year.</p>
 variables: year, month, day, unemployment, president party, close, and
 the number of democratic and republican senators, governors, and
 representatives on the associated dates.</p>
+</div>
+<div id="problem-2" class="section level1">
+<h1>Problem 2</h1>
+<p>Reading in and cleaning the Mr. Trash Wheel dataset:</p>
+<pre class="r"><code>mr_trash = 
+  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;)</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
 </div>
 
 

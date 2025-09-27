@@ -8,6 +8,7 @@ Loading the tidyverse library.
 
 ```{r}
 library(tidyverse)
+library(readxl)
 ```
 
 # Problem 1
@@ -89,6 +90,16 @@ The unemployment dataset contains 68 observations and 3 variables (after cleanin
 
 The resulting fully joined dataset has 828 observations and 12 variables: year, month, day, unemployment, president party, close, and the number of democratic and republican senators, governors, and representatives on the associated dates.
 
+# Problem 2
+
+Reading in and cleaning the Mr. Trash Wheel dataset:
+
+```{r}
+
+mr_trash = 
+  read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel")
+
+```
 
 
 
