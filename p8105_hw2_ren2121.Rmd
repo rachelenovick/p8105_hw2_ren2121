@@ -208,15 +208,26 @@ zori_df =
     zip_code = RegionName,
     county = CountyName,
     size_rank = SizeRank,
-    region_type = RegionType
   ) %>%
-  select(-StateName) %>%
+  select(-StateName, -RegionType) %>%
   mutate(
     county = str_remove(county, " County$")
   ) %>%
-  relocate(year, month, day, county, zip_code)
+  relocate(year, month, day, county, zip_code) %>%
+  janitor::clean_names()
+
 ```
 
+Joining the two datasets:
+
+```{r}
+
+zillow_df =
+  full_join(zori_df, zipcodes_df, by = c("year", "month", "day", "county", "zip_code")) |> 
+  relocate(price, .after = last_col()) |> 
+  arrange(year, month, day)
+
+```
 
 
 

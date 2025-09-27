@@ -564,13 +564,13 @@ butts.</p>
     zip_code = RegionName,
     county = CountyName,
     size_rank = SizeRank,
-    region_type = RegionType
   ) %&gt;%
-  select(-StateName) %&gt;%
+  select(-StateName, -RegionType) %&gt;%
   mutate(
     county = str_remove(county, &quot; County$&quot;)
   ) %&gt;%
-  relocate(year, month, day, county, zip_code)</code></pre>
+  relocate(year, month, day, county, zip_code) %&gt;%
+  janitor::clean_names()</code></pre>
 <pre><code>## Rows: 149 Columns: 125
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -579,6 +579,11 @@ butts.</p>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Joining the two datasets:</p>
+<pre class="r"><code>zillow_df =
+  full_join(zori_df, zipcodes_df, by = c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;, &quot;county&quot;, &quot;zip_code&quot;)) |&gt; 
+  relocate(price, .after = last_col()) |&gt; 
+  arrange(year, month, day)</code></pre>
 </div>
 
 
