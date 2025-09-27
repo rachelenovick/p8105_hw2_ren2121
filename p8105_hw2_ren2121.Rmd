@@ -195,6 +195,10 @@ zori_df =
     values_to = "price"
   ) %>%
   mutate(
+    # Remove leading X added by readr for numeric-looking column names
+    date = str_remove(date, "^X"),
+    # Replace underscores with hyphens to match "YYYY-MM-DD"
+    date = str_replace_all(date, "_", "-"),
     date = ymd(date),
     year = year(date),
     month = month(date),

@@ -551,6 +551,10 @@ butts.</p>
     values_to = &quot;price&quot;
   ) %&gt;%
   mutate(
+    # Remove leading X added by readr for numeric-looking column names
+    date = str_remove(date, &quot;^X&quot;),
+    # Replace underscores with hyphens to match &quot;YYYY-MM-DD&quot;
+    date = str_replace_all(date, &quot;_&quot;, &quot;-&quot;),
     date = ymd(date),
     year = year(date),
     month = month(date),
