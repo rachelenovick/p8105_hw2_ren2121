@@ -368,7 +368,8 @@ display: none;
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(readxl)
-library(lubridate)</code></pre>
+library(lubridate)
+library(knitr)</code></pre>
 <div id="problem-1" class="section level1">
 <h1>Problem 1</h1>
 <p>Importing and cleaning the pols-month dataset:</p>
@@ -619,6 +620,110 @@ because they are smaller neighborhoods lower in population, or because
 city, therefore Zillow would not have rental transaction data to report
 for these ZIP codes.</p>
 <p><strong>Comparing prices: January 2021 vs. January 2020</strong></p>
+<pre class="r"><code>jan_prices_drop = 
+  zillow_df |&gt; 
+  filter(month == 1, year %in% c(2020, 2021)) |&gt; 
+  select(zip_code, county, neighborhood, year, price) |&gt; 
+  pivot_wider(
+    names_from = year,
+    values_from = price,
+    names_prefix = &quot;price_&quot;
+  ) |&gt; 
+  mutate(
+    price_drop = price_2021 - price_2020
+  ) |&gt; 
+  arrange(price_drop) |&gt; 
+  select(zip_code, county, neighborhood, price_drop)
+
+
+jan_prices_drop |&gt; 
+  slice_head(n = 10) |&gt; 
+  kable(
+    col.names = c(&quot;ZIP Code&quot;, &quot;County&quot;, &quot;Neighborhood&quot;, &quot;Price Drop&quot;),
+    digits = 0
+  )</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ZIP Code</th>
+<th align="left">County</th>
+<th align="left">Neighborhood</th>
+<th align="right">Price Drop</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10007</td>
+<td align="left">New York</td>
+<td align="left">Lower Manhattan</td>
+<td align="right">-913</td>
+</tr>
+<tr class="even">
+<td align="right">10069</td>
+<td align="left">New York</td>
+<td align="left">NA</td>
+<td align="right">-748</td>
+</tr>
+<tr class="odd">
+<td align="right">10009</td>
+<td align="left">New York</td>
+<td align="left">Lower East Side</td>
+<td align="right">-714</td>
+</tr>
+<tr class="even">
+<td align="right">10016</td>
+<td align="left">New York</td>
+<td align="left">Gramercy Park and Murray Hill</td>
+<td align="right">-712</td>
+</tr>
+<tr class="odd">
+<td align="right">10001</td>
+<td align="left">New York</td>
+<td align="left">Chelsea and Clinton</td>
+<td align="right">-710</td>
+</tr>
+<tr class="even">
+<td align="right">10002</td>
+<td align="left">New York</td>
+<td align="left">Lower East Side</td>
+<td align="right">-710</td>
+</tr>
+<tr class="odd">
+<td align="right">10004</td>
+<td align="left">New York</td>
+<td align="left">Lower Manhattan</td>
+<td align="right">-706</td>
+</tr>
+<tr class="even">
+<td align="right">10038</td>
+<td align="left">New York</td>
+<td align="left">Lower Manhattan</td>
+<td align="right">-698</td>
+</tr>
+<tr class="odd">
+<td align="right">10012</td>
+<td align="left">New York</td>
+<td align="left">Greenwich Village and Soho</td>
+<td align="right">-686</td>
+</tr>
+<tr class="even">
+<td align="right">10010</td>
+<td align="left">New York</td>
+<td align="left">Gramercy Park and Murray Hill</td>
+<td align="right">-685</td>
+</tr>
+</tbody>
+</table>
+<p>Looking at the table showing the 10 ZIP codes with the largest drop
+in rent price between January 2021 and January 2020, it seems that the
+areas that experienced the greatest price differentials were in lower
+Manhattan, in some of the most popular and congested parts of the city.
+This makes sense, because the during the COVID-19 pandemic, people were
+wanting to be physically more separated from one another. Additionally,
+during the pandemic lockdown, people could not take advantage of most of
+the typical draws of residing in the middle of Manhattan’s commercial
+areas such as easy access to restaurants, bars, offices, and other
+attractions.</p>
 </div>
 
 

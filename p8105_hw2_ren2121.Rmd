@@ -10,6 +10,7 @@ Loading the tidyverse library.
 library(tidyverse)
 library(readxl)
 library(lubridate)
+library(knitr)
 ```
 
 # Problem 1
@@ -243,4 +244,31 @@ Looking at these zip codes, I noticed that many are in Queens County, such as 11
 
 **Comparing prices: January 2021 vs. January 2020**
 
+```{r}
 
+jan_prices_drop = 
+  zillow_df |> 
+  filter(month == 1, year %in% c(2020, 2021)) |> 
+  select(zip_code, county, neighborhood, year, price) |> 
+  pivot_wider(
+    names_from = year,
+    values_from = price,
+    names_prefix = "price_"
+  ) |> 
+  mutate(
+    price_drop = price_2021 - price_2020
+  ) |> 
+  arrange(price_drop) |> 
+  select(zip_code, county, neighborhood, price_drop)
+
+
+jan_prices_drop |> 
+  slice_head(n = 10) |> 
+  kable(
+    col.names = c("ZIP Code", "County", "Neighborhood", "Price Drop"),
+    digits = 0
+  )
+
+```
+
+Looking at the table showing the 10 ZIP codes with the largest drop in rent price between January 2021 and January 2020, it seems that the areas that experienced the greatest price differentials were in lower Manhattan, in some of the most popular and congested parts of the city. This makes sense, because the during the COVID-19 pandemic, people were wanting to be physically more separated from one another. Additionally, during the pandemic lockdown, people could not take advantage of most of the typical draws of residing in the middle of Manhattan's commercial areas such as easy access to restaurants, bars, offices, and other attractions.
