@@ -9,6 +9,7 @@ Loading the tidyverse library.
 ```{r}
 library(tidyverse)
 library(readxl)
+library(lubridate)
 ```
 
 # Problem 1
@@ -170,9 +171,39 @@ Importing and cleaning the zipcodes dataset:
 
 zipcodes_df = 
   read_csv("zillow_data/Zip_Codes.csv", na = c("NA", ".", "")) |> 
-  janitor::clean_names()
+  janitor::clean_names() |> 
+ mutate(
+    file_date = mdy(file_date),  # or ymd(file_date) depending on format
+    year = year(file_date),
+    month = month(file_date),
+    day = day(file_date)
+  ) |> 
+  select(-file_date) |> 
+  relocate(year, month, day, county, zip_code)
 
 ```
+
+Importing and cleaning the second dataset:
+
+```{r}
+
+zori_df =
+  read_csv("zillow_data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", "")) %>%
+  pivot_longer(
+    cols = 10:ncol(.),
+    names_to = "date",
+    values_to = "price"
+  ) %>%
+  mutate(
+    date = ymd(date),
+    year = year(date),
+    month = month(date),
+    day = day(date)
+  ) %>%
+  select(1:9, year, month, day, price)
+
+```
+
 
 
 
