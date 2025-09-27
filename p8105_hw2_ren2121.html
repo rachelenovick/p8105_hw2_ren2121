@@ -528,12 +528,12 @@ butts.</p>
   janitor::clean_names() |&gt; 
  mutate(
     file_date = mdy(file_date),
-    year = year(file_date),
-    month = month(file_date),
-    day = day(file_date)
+    file_date_year = year(file_date),
+    file_date_month = month(file_date),
+    file_date_day = day(file_date)
   ) |&gt; 
   select(-file_date) |&gt; 
-  relocate(year, month, day, county, zip_code)</code></pre>
+  relocate(county, zip_code)</code></pre>
 <pre><code>## Rows: 322 Columns: 7
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -569,7 +569,7 @@ butts.</p>
   mutate(
     county = str_remove(county, &quot; County$&quot;)
   ) %&gt;%
-  relocate(year, month, day, county, zip_code) %&gt;%
+  relocate(county, zip_code, year, month, day) %&gt;%
   janitor::clean_names()</code></pre>
 <pre><code>## Rows: 149 Columns: 125
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -581,9 +581,17 @@ butts.</p>
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <p>Joining the two datasets:</p>
 <pre class="r"><code>zillow_df =
-  full_join(zori_df, zipcodes_df, by = c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;, &quot;county&quot;, &quot;zip_code&quot;)) |&gt; 
+  full_join(zori_df, zipcodes_df, by = c(&quot;county&quot;, &quot;zip_code&quot;)) |&gt; 
   relocate(price, .after = last_col()) |&gt; 
   arrange(year, month, day)</code></pre>
+<p><strong>Description of the dataset</strong></p>
+<p>The final tidy dataset has 17458 total observations.</p>
+<p>There are 149 unique ZIP codes, and 43 unique neighborhoods in the
+dataset.</p>
+<p>There are 171 zipcodes that appear in the ZIP code dataset but not in
+the Zillow Rental Price dataset.</p>
+<p>missing_zips &lt;- setdiff(zipcodes_df<span class="math inline">\(zip_code, zori_df\)</span>zip_code)</p>
+<pre class="r"><code>missing_zips &lt;- setdiff(zipcodes_df$zip_code, zori_df$zip_code)</code></pre>
 </div>
 
 

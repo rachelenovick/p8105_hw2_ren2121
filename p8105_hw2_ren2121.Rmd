@@ -174,12 +174,12 @@ zipcodes_df =
   janitor::clean_names() |> 
  mutate(
     file_date = mdy(file_date),
-    year = year(file_date),
-    month = month(file_date),
-    day = day(file_date)
+    file_date_year = year(file_date),
+    file_date_month = month(file_date),
+    file_date_day = day(file_date)
   ) |> 
   select(-file_date) |> 
-  relocate(year, month, day, county, zip_code)
+  relocate(county, zip_code)
 
 ```
 
@@ -213,7 +213,7 @@ zori_df =
   mutate(
     county = str_remove(county, " County$")
   ) %>%
-  relocate(year, month, day, county, zip_code) %>%
+  relocate(county, zip_code, year, month, day) %>%
   janitor::clean_names()
 
 ```
@@ -223,14 +223,23 @@ Joining the two datasets:
 ```{r}
 
 zillow_df =
-  full_join(zori_df, zipcodes_df, by = c("year", "month", "day", "county", "zip_code")) |> 
+  full_join(zori_df, zipcodes_df, by = c("county", "zip_code")) |> 
   relocate(price, .after = last_col()) |> 
   arrange(year, month, day)
 
 ```
 
+**Description of the dataset**
 
+The final tidy dataset has `r nrow(zillow_df)` total observations.
 
+There are `r length(unique(zori_df$zip_code))` unique ZIP codes, and `r length(unique(zillow_df$neighborhood))` unique neighborhoods in the dataset.
 
+There are `r length(setdiff(zipcodes_df$zip_code, zori_df$zip_code))` zipcodes that appear in the ZIP code dataset but not in the Zillow Rental Price dataset. 
 
+missing_zips <- setdiff(zipcodes_df$zip_code, zori_df$zip_code)
+
+```{r}
+missing_zips <- setdiff(zipcodes_df$zip_code, zori_df$zip_code)
+```
 
