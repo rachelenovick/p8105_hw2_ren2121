@@ -462,10 +462,10 @@ representatives on the associated dates.</p>
 <h1>Problem 2</h1>
 <p>Reading in and cleaning the Mr. Trash Wheel dataset:</p>
 <pre class="r"><code>mr_trash = 
-  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...15`
-## • `` -&gt; `...16`</code></pre>
+  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N653&quot;) |&gt; 
+  janitor::clean_names() |&gt; 
+  drop_na(dumpster) |&gt; 
+  mutate(sports_balls = as.integer(round(sports_balls)))</code></pre>
 </div>
 
 

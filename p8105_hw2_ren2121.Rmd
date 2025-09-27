@@ -97,7 +97,10 @@ Reading in and cleaning the Mr. Trash Wheel dataset:
 ```{r}
 
 mr_trash = 
-  read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel")
+  read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N653") |> 
+  janitor::clean_names() |> 
+  drop_na(dumpster) |> 
+  mutate(sports_balls = as.integer(round(sports_balls)))
 
 ```
 
