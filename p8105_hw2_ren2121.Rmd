@@ -100,7 +100,10 @@ mr_trash =
   read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N653") |> 
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
-  mutate(sports_balls = as.integer(round(sports_balls)))
+  mutate(sports_balls = as.integer(round(sports_balls)))|> 
+  relocate(sports_balls, .after = last_col()) |> 
+  mutate(year = as.integer(year)) |> 
+  mutate(wheel = "mr")
 
 ```
 
@@ -110,11 +113,39 @@ Reading in and cleaning the Professor Trash Wheel dataset:
 
 prof_trash = 
   read_excel("trash_data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M120") |> 
-  janitor::clean_names()
+  janitor::clean_names()|> 
+  mutate(wheel = "prof")
 
 ```
 
+Reading in and cleaning the Gwynnda dataset:
 
+```{r}
+
+gwynnda_trash = 
+  read_excel("trash_data.xlsx", sheet = "Gwynnda Trash Wheel", range = "A2:L265") |> 
+  janitor::clean_names() |> 
+  mutate(wheel = "gwynnda")
+
+```
+
+Joining the datasets:
+
+```{r}
+
+full_trash = 
+  full_join(mr_trash, prof_trash, by = NULL) |> 
+  full_join(gwynnda_trash, by = NULL)
+
+```
+
+**Description of the datasets**
+
+The Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel all provide data on the amount, type, and date of collection of trash by each respective trash wheel as well as the number of homes they powered by running. They all contain the following variables: `r paste(names(prof_trash), collapse = ", ")`. Mr. Trash Wheel also contains a variable for the number of sports balls collected. In the final joined dataset, there are `r nrow(full_trash)` total observations.
+
+For available data, the total weight of trash collected by Professor Trash Wheel was `r sum(full_trash[["weight_tons"]], na.rm = TRUE)` tons.
+
+In June 2022, Gwynnda Trash Wheel collected `r sum(full_trash[["cigarette_butts"]][full_trash[["month"]] == "June" & full_trash[["year"]] == 2022], na.rm = TRUE)` cigarette butts.
 
 
 
