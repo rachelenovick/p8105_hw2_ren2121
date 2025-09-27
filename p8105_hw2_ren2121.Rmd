@@ -173,7 +173,7 @@ zipcodes_df =
   read_csv("zillow_data/Zip_Codes.csv", na = c("NA", ".", "")) |> 
   janitor::clean_names() |> 
  mutate(
-    file_date = mdy(file_date),  # or ymd(file_date) depending on format
+    file_date = mdy(file_date),
     year = year(file_date),
     month = month(file_date),
     day = day(file_date)
@@ -195,17 +195,26 @@ zori_df =
     values_to = "price"
   ) %>%
   mutate(
-    # Remove leading X added by readr for numeric-looking column names
     date = str_remove(date, "^X"),
-    # Replace underscores with hyphens to match "YYYY-MM-DD"
     date = str_replace_all(date, "_", "-"),
     date = ymd(date),
     year = year(date),
     month = month(date),
     day = day(date)
   ) %>%
-  select(1:9, year, month, day, price)
-
+  select(1:9, year, month, day, price) %>%
+  # rename columns
+  rename(
+    zip_code = RegionName,
+    county = CountyName,
+    size_rank = SizeRank,
+    region_type = RegionType
+  ) %>%
+  select(-StateName) %>%
+  mutate(
+    county = str_remove(county, " County$")
+  ) %>%
+  relocate(year, month, day, county, zip_code)
 ```
 
 

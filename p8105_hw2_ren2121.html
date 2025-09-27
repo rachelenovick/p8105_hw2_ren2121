@@ -527,7 +527,7 @@ butts.</p>
   read_csv(&quot;zillow_data/Zip_Codes.csv&quot;, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt; 
   janitor::clean_names() |&gt; 
  mutate(
-    file_date = mdy(file_date),  # or ymd(file_date) depending on format
+    file_date = mdy(file_date),
     year = year(file_date),
     month = month(file_date),
     day = day(file_date)
@@ -551,16 +551,26 @@ butts.</p>
     values_to = &quot;price&quot;
   ) %&gt;%
   mutate(
-    # Remove leading X added by readr for numeric-looking column names
     date = str_remove(date, &quot;^X&quot;),
-    # Replace underscores with hyphens to match &quot;YYYY-MM-DD&quot;
     date = str_replace_all(date, &quot;_&quot;, &quot;-&quot;),
     date = ymd(date),
     year = year(date),
     month = month(date),
     day = day(date)
   ) %&gt;%
-  select(1:9, year, month, day, price)</code></pre>
+  select(1:9, year, month, day, price) %&gt;%
+  # rename columns
+  rename(
+    zip_code = RegionName,
+    county = CountyName,
+    size_rank = SizeRank,
+    region_type = RegionType
+  ) %&gt;%
+  select(-StateName) %&gt;%
+  mutate(
+    county = str_remove(county, &quot; County$&quot;)
+  ) %&gt;%
+  relocate(year, month, day, county, zip_code)</code></pre>
 <pre><code>## Rows: 149 Columns: 125
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
