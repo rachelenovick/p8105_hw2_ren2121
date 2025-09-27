@@ -237,9 +237,10 @@ There are `r length(unique(zori_df$zip_code))` unique ZIP codes, and `r length(u
 
 There are `r length(setdiff(zipcodes_df$zip_code, zori_df$zip_code))` zipcodes that appear in the ZIP code dataset but not in the Zillow Rental Price dataset. 
 
-missing_zips <- setdiff(zipcodes_df$zip_code, zori_df$zip_code)
+The ZIP codes in ZIP Codes but not in Zillow Rental Price are: `r paste(setdiff(zipcodes_df$zip_code, zori_df$zip_code), collapse = ", ")`.
 
-```{r}
-missing_zips <- setdiff(zipcodes_df$zip_code, zori_df$zip_code)
-```
+Looking at these zip codes, I noticed that many are in Queens County, such as 11423 and 11040, Richmond County (Staten Island), such as 10302 and 10313, Brooklyn County, such as 11252 and 11202, or Bronx County, such as 10464. There are some zipcodes as well in New York County (Manhattan). It may be that these areas have less rental units, either because they are smaller neighborhoods lower in population, or because (in the case of Manhattan), they are in more commercial districts of the city, therefore Zillow would not have rental transaction data to report for these ZIP codes. 
+
+**Comparing prices: January 2021 vs. January 2020**
+
 
