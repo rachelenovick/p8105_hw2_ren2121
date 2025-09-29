@@ -355,7 +355,7 @@ display: none;
 </div>
 
 
-<p>Loading the tidyverse library.</p>
+<p>Loading libraries:</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -458,7 +458,8 @@ unemployment associated with the month/year.</p>
 <p>The resulting fully joined dataset has 828 observations and 12
 variables: year, month, day, unemployment, president party, close, and
 the number of democratic and republican senators, governors, and
-representatives on the associated dates.</p>
+representatives on the associated dates. The range of years included in
+the dataset is from 1947-2015.</p>
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
@@ -560,7 +561,6 @@ butts.</p>
     day = day(date)
   ) %&gt;%
   select(1:9, year, month, day, price) %&gt;%
-  # rename columns
   rename(
     zip_code = RegionName,
     county = CountyName,

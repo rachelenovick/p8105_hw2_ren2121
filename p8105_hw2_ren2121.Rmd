@@ -4,7 +4,7 @@ output: html_document
 date: "2025-09-26"
 ---
 
-Loading the tidyverse library.
+Loading libraries:
 
 ```{r}
 library(tidyverse)
@@ -90,7 +90,7 @@ The snp dataset has 787 observations and 4 variables (after cleaning), and provi
 
 The unemployment dataset contains 68 observations and 3 variables (after cleaning), and provides information on the percentage of unemployment by date. The variables it includes are: year, month, and % unemployment associated with the month/year.
 
-The resulting fully joined dataset has 828 observations and 12 variables: year, month, day, unemployment, president party, close, and the number of democratic and republican senators, governors, and representatives on the associated dates.
+The resulting fully joined dataset has 828 observations and 12 variables: year, month, day, unemployment, president party, close, and the number of democratic and republican senators, governors, and representatives on the associated dates. The range of years included in the dataset is from 1947-2015.
 
 # Problem 2
 
@@ -204,7 +204,6 @@ zori_df =
     day = day(date)
   ) %>%
   select(1:9, year, month, day, price) %>%
-  # rename columns
   rename(
     zip_code = RegionName,
     county = CountyName,
