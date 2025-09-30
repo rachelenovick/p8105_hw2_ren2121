@@ -465,7 +465,7 @@ the dataset is from 1947-2015.</p>
 <h1>Problem 2</h1>
 <p>Reading in and cleaning the Mr. Trash Wheel dataset:</p>
 <pre class="r"><code>mr_trash = 
-  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N653&quot;) |&gt; 
+  read_excel(&quot;2025_trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N653&quot;) |&gt; 
   janitor::clean_names() |&gt; 
   drop_na(dumpster) |&gt; 
   mutate(
@@ -479,7 +479,7 @@ the dataset is from 1947-2015.</p>
   relocate(sports_balls, .after = last_col())</code></pre>
 <p>Reading in and cleaning the Professor Trash Wheel dataset:</p>
 <pre class="r"><code>prof_trash = 
-  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M120&quot;) |&gt; 
+  read_excel(&quot;2025_trash_data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M120&quot;) |&gt; 
   janitor::clean_names()|&gt; 
    mutate(
     day = day(date),
@@ -489,7 +489,7 @@ the dataset is from 1947-2015.</p>
   relocate(year, month, day, .after = wheel)</code></pre>
 <p>Reading in and cleaning the Gwynnda dataset:</p>
 <pre class="r"><code>gwynnda_trash = 
-  read_excel(&quot;trash_data.xlsx&quot;, sheet = &quot;Gwynnda Trash Wheel&quot;, range = &quot;A2:L265&quot;) |&gt; 
+  read_excel(&quot;2025_trash_data.xlsx&quot;, sheet = &quot;Gwynns Falls Trash Wheel&quot;, range = &quot;A2:L265&quot;) |&gt; 
   janitor::clean_names() |&gt; 
   mutate(
     day = day(date),

@@ -99,7 +99,7 @@ Reading in and cleaning the Mr. Trash Wheel dataset:
 ```{r}
 
 mr_trash = 
-  read_excel("trash_data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N653") |> 
+  read_excel("2025_trash_data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N653") |> 
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
   mutate(
@@ -119,7 +119,7 @@ Reading in and cleaning the Professor Trash Wheel dataset:
 ```{r}
 
 prof_trash = 
-  read_excel("trash_data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M120") |> 
+  read_excel("2025_trash_data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M120") |> 
   janitor::clean_names()|> 
    mutate(
     day = day(date),
@@ -135,7 +135,7 @@ Reading in and cleaning the Gwynnda dataset:
 ```{r}
 
 gwynnda_trash = 
-  read_excel("trash_data.xlsx", sheet = "Gwynnda Trash Wheel", range = "A2:L265") |> 
+  read_excel("2025_trash_data.xlsx", sheet = "Gwynns Falls Trash Wheel", range = "A2:L265") |> 
   janitor::clean_names() |> 
   mutate(
     day = day(date),
